@@ -1,0 +1,17 @@
+# docker/contrib/init/systemd/docker.service at master · dotcloud/docker
+# https://github.com/dotcloud/docker/blob/master/contrib/init/systemd/docker.service
+
+[Unit]
+Description=Docker Application Container Engine
+Documentation=http://docs.docker.io
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/docker -d
+Restart=on-failure
+LimitNOFILE=1048576
+LimitNPROC=1048576
+
+[Install]
+WantedBy=multi-user.target
+
