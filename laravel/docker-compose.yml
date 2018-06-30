@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    volumes:
+    - .:/opt/demo
+    - ./data:/data
+    ports:
+    - 8000:80
