@@ -1,0 +1,5 @@
+/.composer
+/data
+/storage
+/node_modules
+/vendor
