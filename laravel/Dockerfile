@@ -30,7 +30,8 @@ RUN cd /usr/local && \
     echo "export PATH=${PATH}:/usr/local/node/bin" > /etc/profile.d/node.sh && \
     rm node-v8.11.3-linux-x64.tar.xz
 
-RUN groupadd -g $GID demo && \
+RUN mkdir -p /opt/demo && \
+    groupadd -g $GID demo && \
     useradd -u $UID -g $GID --create-home --shell=/bin/bash demo
 
 RUN su - demo -c "curl -o- -L https://yarnpkg.com/install.sh | bash"
@@ -38,7 +39,7 @@ RUN su - demo -c "curl -o- -L https://yarnpkg.com/install.sh | bash"
 RUN cd /usr/local/src && \
     curl -L https://getcomposer.org/installer | php && \
     chmod 755 composer.phar && \
-    mv composer.phar /usr/local/bin/composer.phar
+    mv composer.phar /usr/local/bin/composer
 
 RUN rm -f /etc/php/7.2/fpm/pool.d/* && \
     rm -f /etc/nginx/sites-enabled/*
@@ -47,7 +48,10 @@ COPY docker/nginx /etc/nginx
 COPY docker/supervisord.conf /etc/supervisord.conf
 COPY docker/supervisord.d /etc/supervisord.d
 COPY docker/php-fpm /etc/php/7.2/fpm
+COPY docker/entrypoint.sh /
 
 VOLUME ["/opt/demo", "/data"]
 
-CMD ["supervisord", "-n"]
+WORKDIR /opt/project
+
+ENTRYPOINT [ "bash", "/entrypoint.sh" ]
